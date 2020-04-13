@@ -16,7 +16,8 @@ $app->get('/api/clientes', function (Request $request, Response $response, $args
             $clientes = $resultado->fetchAll(PDO::FETCH_OBJ);
             // echo json_encode($clientes);
             $response->getBody()->write(json_encode($clientes));
-            return $response;
+            return $response
+            ->withHeader('Content-Type', 'application/json');
         }else {
             // echo json_encode("no existen clientes en la base de datos");
             $response->getBody()->write("no existen clientes en la base de datos");
@@ -40,7 +41,8 @@ $app->get('/api/clientes/{id}', function (Request $request, Response $response, 
         if ($resultado->rowCount() > 0){
             $cliente = $resultado->fetchAll(PDO::FETCH_OBJ);
             $response->getBody()->write(json_encode($cliente));
-            return $response;
+            return $response
+            ->withHeader('Content-Type', 'application/json');
         }else {
             $response->getBody()->write("no existen cliente en la base de datos");
             return $response;
@@ -73,7 +75,8 @@ $app->post('/api/clientes/nuevo', function (Request $request, Response $response
         $resultado->execute();
 
         $response->getBody()->write(json_encode($value));
-        return $response;
+        return $response
+        ->withHeader('Content-Type', 'application/json');
         $resultado = null;
         $db = null;
     } catch (PDOException $err) {
@@ -108,7 +111,8 @@ $app->put('/api/clientes/modificar/{id}', function (Request $request, Response $
         $resultado->execute();
 
         $response->getBody()->write(json_encode($value));
-        return $response;
+        return $response
+        ->withHeader('Content-Type', 'application/json');
         $resultado = null;
         $db = null;
     } catch (PDOException $err) {

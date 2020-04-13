@@ -2,7 +2,7 @@
 class db{
     private $dbHost = 'localhost';
     private $dbUser = 'root';
-    private $dbPass = 'root';
+    private $dbPass = '123456';
     private $dbName = 'apiRest';
 
     public function conectDB() {
