@@ -146,3 +146,43 @@ $app->delete('/api/clientes/delete/{id}', function (Request $request, Response $
         echo '{"error": {"text: '.$err->getMessage().'}';
     }
 });
+
+$app->post('/api/createuser', function (Request $request, Response $response, $args) {
+
+    $value = json_decode($request->getBody());
+
+    try {
+        $db = new DbOperation();    
+        $res = $db->createUser($value->name, $value->username, $value->password);
+
+        $res1 = array('error' => false, 
+                'message' => 'Te registraste exitosamente'); 
+        $res2 = array('error' => true, 
+                'message' => 'Ha ocurrido un error mientras te registrabas'); 
+        $res3 = array('error' => true, 
+                'message' => 'Lo sentimos, el usuario ya existe'); 
+
+        if($res == 0){
+            return echoResponse(201, $response, $res1);
+        } else if ($res == 1){
+            return echoResponse(200, $response, $res2);
+        } else if ($res == 2){
+            return echoResponse(200, $response, $res3);
+        }
+    
+        $res = null;    
+        $db = null;
+
+    } catch (PDOException $err) {
+        echo '{"error": {"text: '.$err->getMessage().'}';
+    }
+
+});
+
+function echoResponse($statusCode, $response, $json){
+
+    $response->getBody()->write(json_encode($json));
+    $newResponse = $response->withStatus($statusCode);
+    return $newResponse
+    ->withHeader('Content-Type', 'application/json');
+}
